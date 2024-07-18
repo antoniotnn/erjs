@@ -7,7 +7,7 @@ interface InfoProps {
     description: string;
 }
 
-export function info(props: InfoProps) {
+export default function info(props: InfoProps) {
 
     //setTimeout usado por conta do EventLoop do Javascript (micro e macrotasks)
     // info em: https://javascript.info/event-loop e https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Event_loop

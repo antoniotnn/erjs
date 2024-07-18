@@ -5,7 +5,7 @@ import EditorProfileView from "./views/EditorProfile.view";
 import PostCreateView from "./views/PostCreate.view";
 import NotFound404 from "./views/NotFound404.view";
 import React, {useEffect} from "react";
-import {info} from "../core/utils/info";
+import info from "../core/utils/info";
 import PostEditView from "./views/PostEdit.view";
 
 export default function App() {

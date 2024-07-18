@@ -7,6 +7,8 @@ import useEditors from "../../core/hooks/useEditors";
 
 export default function EditorsList() {
 
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {editorsList, loading, fetchAllEditors} = useEditors();
 
     useEffect(() => {

@@ -3,8 +3,8 @@ import * as DL from './Default.layout.styles';
 import NavBar from "../../components/NavBar";
 import Logo from "../../components/Logo";
 import SessionController from "../../components/SessionController";
-import {confirm} from "../../../core/utils/confirm";
-import {info} from "../../../core/utils/info";
+import confirm from "../../../core/utils/confirm";
+import info from "../../../core/utils/info";
 
 interface DefaultLayoutProps {
     children: React.ReactNode;

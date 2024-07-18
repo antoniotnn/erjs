@@ -9,32 +9,23 @@ import Loading from "../components/Loading";
 import PostPreview from "./PostPreview";
 import modal from "../../core/utils/modal";
 import PostTitleAnchor from "../components/PostTitleAnchor";
-import { Post, PostService } from "tnn-sdk";
+import {Post} from "tnn-sdk";
+import usePosts from "../../core/hooks/usePosts";
 
 
 export default function PostsList() {
-    const [posts, setPosts] = useState<Post.Paginated>();
-    const [error, setError] = useState<Error>();
+
+    const { loading, paginatedPosts, fetchPosts } = usePosts();
     const [page, setPage] = useState(0);
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        setLoading(true);
-        PostService
-            .getAllPosts({
-                page,
-                size: 7,
-                showAll: true,
-                sort: ['createdAt', 'desc']
-            })
-            .then(setPosts)
-            .catch(error => setError(new Error(error.message)))
-            .finally(() => {
-                setLoading(false)
-            });
-    }, [page]);
-
-    if (error) throw error;
+        fetchPosts({
+            page,
+            size: 7,
+            showAll: true,
+            sort: ["createdAt", "desc"],
+        })
+    }, [fetchPosts, page]);
 
     const columns = useMemo<Column<Post.Summary>[]>(
         () => [
@@ -119,16 +110,16 @@ export default function PostsList() {
 
     const instance = useTable<Post.Summary>(
         {
-            data: posts?.content || [],
+            data: paginatedPosts?.content || [],
             columns,
             manualPagination: true,
             initialState: { pageIndex: 0 },
-            pageCount: posts?.totalPages,
+            pageCount: paginatedPosts?.totalPages,
         },
         usePagination
     );
 
-    if (!posts) {
+    if (!paginatedPosts) {
         return <div>
             <Skeleton height={32}/>
             <Skeleton height={40}/>

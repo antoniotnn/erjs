@@ -4,11 +4,11 @@ import Confirm from "../../app/components/Confirm/Confirm";
 
 interface ConfirmProps {
     title: string;
-    onConfirm?: () => any;
-    onCancel?: () => any;
+    onConfirm?: (...args: any[] ) => void;
+    onCancel?: (...args: any[]) => void;
 }
 
-export function confirm(props: ConfirmProps) {
+export default function confirm(props: ConfirmProps) {
     //setTimeout usado por conta do EventLoop do Javascript (micro e macrotasks)
     // info em: https://javascript.info/event-loop e https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Event_loop
     setTimeout(() => {

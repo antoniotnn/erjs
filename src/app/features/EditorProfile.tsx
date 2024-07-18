@@ -1,11 +1,12 @@
-import { transparentize } from "polished";
+import {transparentize} from "polished";
 import styled from "styled-components";
 import FieldDescriptor from "../components/FieldDescriptor/FieldDescriptor";
 import ProgressBar from "../components/ProgressBar/ProgressBar";
 import ValueDescriptor from "../components/ValueDescriptor/ValueDescriptor";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useParams} from "react-router-dom";
-import {getEditorDescription, UserService, User } from "tnn-sdk";
+import {getEditorDescription} from "tnn-sdk";
+import useSingleEditor from "../../core/hooks/useSingleEditor";
 
 interface EditorProfileProps {
     hidePersonalData?: boolean;
@@ -13,13 +14,11 @@ interface EditorProfileProps {
 
 function EditorProfile (props: EditorProfileProps) {
     const params = useParams<{ id: string }>();
-    const [editor, setEditor] = useState<User.EditorDetailed>();
+    const { editor, fetchEditor } = useSingleEditor();
 
     useEffect(() => {
-        UserService
-            .getExistingEditor(Number(params.id))
-            .then(setEditor)
-    }, [params.id]);
+        fetchEditor(Number(params.id));
+    }, [fetchEditor, params.id]);
 
     if (!editor) return null;
 
@@ -39,6 +38,7 @@ function EditorProfile (props: EditorProfileProps) {
                     {
                         editor.skills?.map(skill => {
                             return <ProgressBar
+                                key={skill.name}
                                 progress={skill.percentage}
                                 title={skill.name}
                                 theme={'primary'}

@@ -8,7 +8,7 @@ import {Tag} from "react-tag-input";
 import WordPriceCounter from "../components/WorldPriceCounter";
 import Button from "../components/Button/Button";
 import countWordsInMarkdown from "../../core/utils/countWordsInMarkdown";
-import {info} from "../../core/utils/info";
+import info from "../../core/utils/info";
 import Loading from "../components/Loading";
 import {useHistory} from "react-router-dom";
 import { PostService } from "tnn-sdk";

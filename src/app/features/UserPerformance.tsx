@@ -1,37 +1,29 @@
-import Chart, {ChartProps} from "../components/Chart/Chart";
-import {useEffect, useState} from "react";
-import transformEditorMonthlyEarningsIntoChartJs from "../../core/utils/transformEditorMonthlyEarningsIntoChartJs";
-import withBoundary from "../../core/hoc/withBoundary";
+import { useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
-import { MetricService } from "tnn-sdk";
-
+import withBoundary from "../../core/hoc/withBoundary";
+import usePerformance from "../../core/hooks/usePerformance";
+import Chart from "../components/Chart/Chart";
 
 function UserPerformance() {
-    const [editorEarnings, setEditorEarnings] = useState<ChartProps['data']>();
-    const [error, setError] = useState<Error>();
+    const { fetchPerformance, performance } = usePerformance();
 
     useEffect(() => {
-        MetricService
-            .getEditorMonthlyEarnings()
-            .then(transformEditorMonthlyEarningsIntoChartJs)
-            .then(setEditorEarnings)
-            .catch(error => {
-                setError(new Error(error.message));
-            })
-    }, []);
+        fetchPerformance();
+    }, [fetchPerformance]);
 
-    if (error) throw error;
+    if (!performance)
+        return (
+            <div>
+                <Skeleton height={227} />
+            </div>
+        );
 
-    if (!editorEarnings) {
-        return <div>
-            <Skeleton height={227}/>
-        </div>
-    }
-
-    return <Chart
-        title="Média de performance nos últimos 12 meses"
-        data={editorEarnings}
-    />
+    return (
+        <Chart
+            title="Média de performance nos últimos 12 meses"
+            data={performance}
+        />
+    );
 }
 
-export default withBoundary(UserPerformance, 'UserPerformance');
+export default withBoundary(UserPerformance, "Batata");
