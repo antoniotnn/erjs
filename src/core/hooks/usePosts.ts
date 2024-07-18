@@ -3,6 +3,7 @@ import { Post } from "tnn-sdk";
 import selectPaginatedPosts from "../selectors/selectPaginatedPosts";
 import selectPostsFetching from "../selectors/selectPostsFetching";
 import * as PostActions from "../store/Post.slice";
+import {useCallback} from "react";
 
 export default function usePosts() {
 
@@ -11,9 +12,11 @@ export default function usePosts() {
     const paginatedPosts = useSelector(selectPaginatedPosts);
     const loading = useSelector(selectPostsFetching);
 
-    async function fetchPosts(query: Post.Query) {
+    const fetchPosts = useCallback(async function(query: Post.Query) {
         dispatch(PostActions.fetchPosts(query));
-    }
+    }, [dispatch]);
+
+
 
     return {
         paginatedPosts,
