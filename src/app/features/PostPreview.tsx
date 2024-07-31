@@ -41,7 +41,7 @@ function PostPreview(props: PostPreviewProps) {
                         onClick={() => {
                             confirm({
                                 title: "Publicar o post?",
-                                onConfirm: publishPost,
+                                onConfirm: () => publishPost(props.postId),
                                 onCancel: reopenModal,
                             });
                         }}
