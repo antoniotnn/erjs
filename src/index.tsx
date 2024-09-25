@@ -6,12 +6,16 @@ import GlobalStyles from "./core/globalStyles";
 import App from "./app";
 import { Provider } from "react-redux";
 import store from "./core/store";
+import './auth/httpConfig';
+import {BrowserRouter} from "react-router-dom";
 
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store} >
-            <App />
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
         </Provider>
         <GlobalStyles />
     </React.StrictMode>,
