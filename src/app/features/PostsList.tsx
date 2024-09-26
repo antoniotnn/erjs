@@ -140,7 +140,7 @@ export default function PostsList() {
                 </div>
             },
         ],
-        []
+        [openInNew]
     );
 
     const instance = useTable<Post.Summary>(

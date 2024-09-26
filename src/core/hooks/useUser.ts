@@ -9,7 +9,7 @@ export default function useUser() {
     const fetchDetailedUser = useCallback(async function () {
         UserService.getDetailedUser(Number(user?.id))
             .then(setDetailedUser);
-    }, []);
+    }, [user?.id]);
 
     return {
         user: detailedUser,
