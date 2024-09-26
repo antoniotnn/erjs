@@ -1,15 +1,18 @@
 import { useCallback, useState } from "react";
 import { User, UserService } from "tnn-sdk";
+import useAuth from "./useAuth";
 
 export default function useUser() {
-    const [user, setUser] = useState<User.Detailed>();
+    const [detailedUser, setDetailedUser] = useState<User.Detailed>();
+    const { user } = useAuth();
 
-    const fetchUser = useCallback(async function () {
-        UserService.getDetailedUser(6).then(setUser);
+    const fetchDetailedUser = useCallback(async function () {
+        UserService.getDetailedUser(Number(user?.id))
+            .then(setDetailedUser);
     }, []);
 
     return {
-        user,
-        fetchUser,
+        user: detailedUser,
+        fetchUser: fetchDetailedUser,
     };
 }
