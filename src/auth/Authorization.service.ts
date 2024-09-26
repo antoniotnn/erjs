@@ -3,6 +3,7 @@ import qs from 'qs';
 import pkceChallenge from 'pkce-challenge';
 
 const AUTH_SERVER = process.env.REACT_APP_AUTH_SERVER_BASE_URL;
+const APP_BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const authServer = axios.create({
     baseURL: AUTH_SERVER,
@@ -30,7 +31,7 @@ export default class AuthService {
         // window.localStorage.removeItem('accessToken');
         // limpa o localstorage somente do domínio da própria aplicação (obs: não limpa o localstorage de outros domínios, e se estiver usando o redux persist, limpará os dados dele)
         window.localStorage.clear();
-        window.location.href = `${AUTH_SERVER}/logout?redirect=http://localhost:3001`;
+        window.location.href = `${AUTH_SERVER}/logout?redirect=${APP_BASE_URL}`;
     }
 
     public static async getNewToken(config: {

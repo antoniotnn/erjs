@@ -13,6 +13,8 @@ import {Post} from "tnn-sdk";
 import usePosts from "../../core/hooks/usePosts";
 import AuthService from "../../auth/Authorization.service";
 
+const BLOG_SERVER_BASE_URL = process.env.REACT_APP_BLOG_SERVER_BASE_URL;
+
 
 export default function PostsList() {
 
@@ -29,7 +31,7 @@ export default function PostsList() {
     }, [fetchPosts, page]);
 
     const openInNew = useCallback(async (post: Post.Summary) => {
-        let url = `http://localhost:3002/posts/${post.id}/${post.slug}`;
+        let url = `${BLOG_SERVER_BASE_URL}/posts/${post.id}/${post.slug}`;
 
         if (!post.published) {
             const codeVerifier = AuthService.getCodeVerifier();
