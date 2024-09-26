@@ -1,5 +1,5 @@
 import Icon from "@mdi/react";
-import {useEffect, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import {Column, usePagination, useTable} from "react-table";
 import {mdiOpenInNew} from "@mdi/js";
 import Table from "../components/Table/Table";
@@ -11,6 +11,7 @@ import modal from "../../core/utils/modal";
 import PostTitleAnchor from "../components/PostTitleAnchor";
 import {Post} from "tnn-sdk";
 import usePosts from "../../core/hooks/usePosts";
+import AuthService from "../../auth/Authorization.service";
 
 
 export default function PostsList() {
@@ -27,6 +28,31 @@ export default function PostsList() {
         })
     }, [fetchPosts, page]);
 
+    const openInNew = useCallback(async (post: Post.Summary) => {
+        let url = `http://localhost:3002/posts/${post.id}/${post.slug}`;
+
+        if (!post.published) {
+            const codeVerifier = AuthService.getCodeVerifier();
+            const refreshToken = AuthService.getRefreshToken();
+
+            if (codeVerifier && refreshToken) {
+                const { access_token } = await AuthService.getNewToken({
+                    codeVerifier,
+                    refreshToken,
+                    scope: 'post:read'
+                });
+
+                url += `?token=${access_token}`;
+            }
+        }
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.click();
+    }, [])
+
     const columns = useMemo<Column<Post.Summary>[]>(
         () => [
             {
@@ -34,13 +60,12 @@ export default function PostsList() {
                 accessor: 'id',
                 Cell: ({ row }) => (
                     <div style={{ paddingLeft: 8, width: "16px" }}>
-                        <a
-                            target={'_blank'}
-                            rel="noreferrer noopener"
-                            href={`http://localhost:3002/posts/${row.original.id}/${row.original.slug}`}
+                        <span
+                            style={{ cursor: 'pointer'}}
+                            onClick={() => openInNew(row.original)}
                         >
                             <Icon path={mdiOpenInNew} size={'16px'} color={'#09f'} />
-                        </a>
+                        </span>
                     </div>
                 )
             },
@@ -107,7 +132,7 @@ export default function PostsList() {
             {
                 id: Math.random().toString(),
                 accessor: 'published',
-                Header: () => <div style={{ textAlign: 'right' }}>Ações</div>,
+                Header: () => <div style={{ textAlign: 'right' }}>Status</div>,
                 Cell: (props) => <div style={{ textAlign: 'right' }}>
                     {
                         props.value ? 'Publicado' : 'Privado'
