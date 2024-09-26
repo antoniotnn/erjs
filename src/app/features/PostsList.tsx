@@ -31,8 +31,18 @@ export default function PostsList() {
         () => [
             {
                 Header: '',
-                accessor: 'id', // accessor is the "key" in the data
-                Cell: () => <Icon path={mdiOpenInNew} size={'14px'} color={'#09f'} />
+                accessor: 'id',
+                Cell: ({ row }) => (
+                    <div style={{ paddingLeft: 8, width: "16px" }}>
+                        <a
+                            target={'_blank'}
+                            rel="noreferrer noopener"
+                            href={`http://localhost:3002/posts/${row.original.id}/${row.original.slug}`}
+                        >
+                            <Icon path={mdiOpenInNew} size={'16px'} color={'#09f'} />
+                        </a>
+                    </div>
+                )
             },
             {
                 Header: () => <div style={{ textAlign: 'left' }}>Título</div>,

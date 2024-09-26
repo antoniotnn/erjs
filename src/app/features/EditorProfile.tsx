@@ -7,7 +7,6 @@ import {useEffect, useMemo} from "react";
 import {useParams} from "react-router-dom";
 import {getEditorDescription, User} from "tnn-sdk";
 import useSingleEditor from "../../core/hooks/useSingleEditor";
-import userEvent from "@testing-library/user-event";
 import useAuth from "../../core/hooks/useAuth";
 
 interface EditorProfileProps {

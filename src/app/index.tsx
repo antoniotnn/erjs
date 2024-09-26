@@ -1,4 +1,4 @@
-import {BrowserRouter, Route, Switch, useHistory, useLocation} from "react-router-dom";
+import { Route, Switch, useHistory, useLocation} from "react-router-dom";
 import Home from "./views/Home.view";
 import EditorsListView from "./views/EditorsList.view";
 import EditorProfileView from "./views/EditorProfile.view";
