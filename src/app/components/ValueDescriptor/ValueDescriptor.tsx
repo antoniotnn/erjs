@@ -13,7 +13,7 @@ export default function ValueDescriptor (props: ValueDescriptorProps) {
     default: '#274060'
   }
 
-  return <VD.Wrapper color={COLORS[props.color || 'default']}>
+  return <VD.Wrapper {...props} color={COLORS[props.color || 'default']}>
     <span className="Description">{ props.description }:</span>
     <div>
       {

@@ -1,15 +1,10 @@
-import { useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 import styled from "styled-components";
-import useUser from "../../core/hooks/useUser";
 import ValueDescriptor from "../components/ValueDescriptor/ValueDescriptor";
+import useAuth from "../../core/hooks/useAuth";
 
 export default function UserEarnings() {
-    const { user, fetchUser } = useUser();
-
-    useEffect(() => {
-        fetchUser();
-    }, [fetchUser]);
+    const { user } = useAuth();
 
     if (!user)
         return (
@@ -32,6 +27,7 @@ export default function UserEarnings() {
             <ValueDescriptor
                 color="primary"
                 description="Ganhos na semana"
+                data-testid={'weeklyEarnings'}
                 value={user.metrics.weeklyEarnings}
                 isCurrency
             />
