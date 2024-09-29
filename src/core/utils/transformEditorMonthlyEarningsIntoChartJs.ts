@@ -2,6 +2,7 @@ import {ChartProps} from "../../app/components/Chart/Chart";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale"
 import { Metric } from "tnn-sdk";
+import parseISO from "date-fns/parseISO";
 
 function transformEditorMonthlyEarningsIntoChartJs(editorEarnings: Metric.EditorMonthlyEarnings): ChartProps['data'] {
 
@@ -10,7 +11,7 @@ function transformEditorMonthlyEarningsIntoChartJs(editorEarnings: Metric.Editor
     const data2: number[] = [];
 
     editorEarnings.forEach(earning => {
-        const formattedMonth = format(new Date(earning.yearMonth), 'MMMM', { locale: ptBR });
+        const formattedMonth = format(parseISO(earning.yearMonth), 'MMMM', { locale: ptBR });
         labels.push(formattedMonth);
         data1.push(earning.totalAmount);
         data2.push(earning.totalPlatformAverageAmount);

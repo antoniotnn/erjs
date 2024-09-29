@@ -7,6 +7,7 @@ import AuthService from "../../../auth/Authorization.service";
 import Skeleton from "react-loading-skeleton";
 import {format} from "date-fns";
 import {ptBR} from "date-fns/locale";
+import parseISO from "date-fns/parseISO";
 
 
 export interface SessionControllerProps {
@@ -35,7 +36,7 @@ function SessionController (props: SessionControllerProps) {
         <SC.Description>
             Editor desde{" "}
             <strong>
-                { format(new Date(user.createdAt), "MMMM 'de' yyyy", {
+                { format(parseISO(user.createdAt), "MMMM 'de' yyyy", {
                     locale: ptBR
                 }) }
             </strong>

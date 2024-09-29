@@ -8,6 +8,8 @@ import {useParams} from "react-router-dom";
 import {getEditorDescription, User} from "tnn-sdk";
 import useSingleEditor from "../../core/hooks/useSingleEditor";
 import useAuth from "../../core/hooks/useAuth";
+import format from 'date-fns/format';
+import parseISO from 'date-fns/parseISO';
 
 interface EditorProfileProps {
     hidePersonalData?: boolean;
@@ -100,7 +102,9 @@ function EditorProfile (props: EditorProfileProps) {
                     (editorData as User.Detailed)?.birthdate && (
                         <FieldDescriptor
                             field={'Nascimento'}
-                            value={(editorData as User.Detailed)?.birthdate}
+                            value={
+                                format(parseISO((editorData as User.Detailed).birthdate), 'dd/MM/yyyy')
+                            }
                         />
                     )
                 }

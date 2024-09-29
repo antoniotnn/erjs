@@ -12,6 +12,7 @@ import PostTitleAnchor from "../components/PostTitleAnchor";
 import {Post} from "tnn-sdk";
 import usePosts from "../../core/hooks/usePosts";
 import AuthService from "../../auth/Authorization.service";
+import parseISO from "date-fns/parseISO";
 
 const BLOG_SERVER_BASE_URL = process.env.REACT_APP_BLOG_SERVER_BASE_URL;
 
@@ -116,7 +117,7 @@ export default function PostsList() {
                         fontFamily: '"Roboto mono", monospace'
                     }}
                     >
-                    { format(new Date(props.value), 'dd/MM/yyyy') }
+                    { format(parseISO(props.value), 'dd/MM/yyyy') }
                 </div>
             },
             {
@@ -128,7 +129,7 @@ export default function PostsList() {
                         fontFamily: '"Roboto mono", monospace'
                     }}
                 >
-                    { format(new Date(props.value), 'dd/MM/yyyy') }
+                    { format(parseISO(props.value), 'dd/MM/yyyy') }
                 </div>
             },
             {
