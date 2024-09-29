@@ -11,51 +11,92 @@ Service.setRequestInterceptors(async (request) => {
 
     // injeta o token de acesso na requisição
     if (accessToken) {
-        request.headers['Authorization'] = `Bearer ${accessToken}`;
+        request.headers["Authorization"] = `Bearer ${accessToken}`;
     }
+
     return request;
 });
+
+// for multiple requests
+let isRefreshing: boolean = false;
+let failedQueue: any[] = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+    failedQueue.forEach((prom) => {
+        if (error) {
+            prom.reject(error);
+        } else {
+            prom.resolve(token);
+        }
+    });
+
+    failedQueue = [];
+};
 
 Service.setResponseInterceptors(
     (response) => response,
     async (error) => {
-        // console.dir(error);
         // recupera informações da requisição
         const originalRequest = error.config;
 
         // caso o erro seja de autenticação e ainda não foi feito o retry
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        if (error?.response?.status === 401 && !originalRequest._retry) {
+            if (isRefreshing) {
+                return new Promise(function (resolve, reject) {
+                    failedQueue.push({ resolve, reject });
+                })
+                    .then((token) => {
+                        originalRequest.headers["Authorization"] = "Bearer " + token;
+                        return axios(originalRequest);
+                    })
+                    .catch((err) => {
+                        return Promise.reject(err);
+                    });
+            }
+
             originalRequest._retry = true;
+            isRefreshing = true;
 
             // recupera o code verifier e o refresh token
             const storage = {
                 codeVerifier: AuthService.getCodeVerifier(),
-                refreshToken: AuthService.getRefreshToken()
+                refreshToken: AuthService.getRefreshToken(),
             };
 
             const { codeVerifier, refreshToken } = storage;
 
             // caso algum não exista, não é possível renovar o token
-            if (!codeVerifier || !refreshToken) {
+            if (!refreshToken || !codeVerifier) {
                 AuthService.imperativelySendToLogout();
                 return;
             }
 
-            // renova o token
-            const tokens = await AuthService.getNewToken({
-                refreshToken,
-                codeVerifier
-            });
+            try {
+                // renova o token
+                const tokens = await AuthService.getNewToken({
+                    codeVerifier,
+                    refreshToken,
+                });
 
-            // armazena o token para novas requisições
-            AuthService.setAccessToken(tokens.access_token);
-            AuthService.setRefreshToken(tokens.refresh_token);
+                // armazena os tokens para novas requisições
+                AuthService.setAccessToken(tokens.access_token);
+                AuthService.setRefreshToken(tokens.refresh_token);
 
-            // implementa o token na requisição
-            originalRequest.headers['Authorization'] = `Bearer ${tokens.access_token}`;
+                // implementa o token na requisição
+                originalRequest.headers[
+                    "Authorization"
+                    ] = `Bearer ${tokens.access_token}`;
 
-            // retorna uma nova chamada do axios com essa requisição
-            return axios(originalRequest);
+                processQueue(null, tokens.access_token);
+
+                // retorna uma nova chamada do axios com essa requisição
+                return axios(originalRequest);
+            } catch (err) {
+                processQueue(err, null);
+                throw err;
+            } finally {
+                isRefreshing = false;
+            }
         }
 
         throw error;
