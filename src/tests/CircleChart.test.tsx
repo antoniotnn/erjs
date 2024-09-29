@@ -41,10 +41,6 @@ it('throws an error if progress is greater than 100', () => {
 
     expect(spy).toHaveBeenCalled();
 
-    // limpa o mock da função console.error
+    // limpa o mock da função console.error, pois se não ele irá interferir em outros testes
     spy.mockRestore();
-});
-
-test('log an error', () => {
-    console.error('something went wrong');
 });
