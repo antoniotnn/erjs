@@ -48,7 +48,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "cypress:open": "cypress open"
   },
   "eslintConfig": {
     "extends": [
@@ -93,6 +94,7 @@
     "@types/react-table": "^7.7.0",
     "@types/react-tag-input": "^6.1.2",
     "@types/styled-components": "^5.1.9",
-    "@types/uuid": "^8.3.2"
+    "@types/uuid": "^8.3.2",
+    "cypress": "^8.3.1"
   }
 }
