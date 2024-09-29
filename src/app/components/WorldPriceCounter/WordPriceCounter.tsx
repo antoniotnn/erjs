@@ -10,7 +10,7 @@ function WordPriceCounter(props: WordPriceCounterProps) {
         throw Error('O quantidade de palavras não pode ser negativa');
     }
     return <WPC.Wrapper>
-        <WPC.WordCounter>{ props.wordsCount } palavras</WPC.WordCounter>
+        <WPC.WordCounter>{ props.wordsCount } {props.wordsCount === 1 ? 'palavra' : 'palavras'}</WPC.WordCounter>
         <WPC.PricePreview>{(props.wordsCount * props.pricePerWord).toLocaleString('pt-br', {
             style: 'currency',
             currency: 'BRL',
